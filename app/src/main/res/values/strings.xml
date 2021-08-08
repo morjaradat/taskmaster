@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">taskmaster</string>
+    <string name="app_name">Taskmaster</string>
+    <string name="title">My Tasks</string>
+    <string name="add_Task">ADD TASK</string>
+    <string name="all_Task">ALL TASKS</string>
+    <string name="image">Image</string>
+    <string name="textview">TextView</string>
+    <string name="taskInputTitle">Task Title</string>
+    <string name="taskInputDescription">Task Description</string>
+    <string name="SubmitButtonForNewTask">ADD Task</string>
+    <string name="addTaskTitle">Add Task</string>
+    <string name="allTaskTitle">All Task</string>
+    <string name="submitMessage">Task was added</string>
 </resources>
