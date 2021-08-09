@@ -11,4 +11,11 @@
     <string name="addTaskTitle">Add Task</string>
     <string name="allTaskTitle">All Task</string>
     <string name="submitMessage">Task was added</string>
+    <string name="setting">Setting</string>
+    <string name="task_detail">Task Detail</string>
+    <string name="update_username">update username</string>
+    <string name="update">Save</string>
+    <string name="username">username</string>
+    <string name="setting_Title">Setting</string>
+    <string name="update_username_title">Update UserName</string>
 </resources>
