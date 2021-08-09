@@ -33,7 +33,7 @@ public class AddTask extends AppCompatActivity {
         public void onClick(View v) {
             String TaskName = ((EditText) findViewById(R.id.inputTaskTitle)).getText().toString();
             Intent taskDetailIntent = new Intent(getApplicationContext(),TaskDetails.class);
-            taskDetailIntent.putExtra("TaskName",TaskName);
+            taskDetailIntent.putExtra("taskName",TaskName);
             startActivity(taskDetailIntent);
             Toast.makeText(getApplicationContext(),"task was added",Toast.LENGTH_LONG).show();
 

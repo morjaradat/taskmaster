@@ -12,7 +12,9 @@
     <string name="allTaskTitle">All Task</string>
     <string name="submitMessage">Task was added</string>
     <string name="setting">Setting</string>
-    <string name="task_detail">Task Detail</string>
+    <string name="task_detail1">Task 1</string>
+    <string name="task_detail2">Task 2</string>
+    <string name="task_detail3">Task 3</string>
     <string name="update_username">update username</string>
     <string name="update">Save</string>
     <string name="username">username</string>
