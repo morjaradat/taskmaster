@@ -15,7 +15,7 @@ public class TaskDetails extends AppCompatActivity {
          Intent intent = getIntent();
         TextView taskTitle = findViewById(R.id.singleTaskTitle);
         if (intent.getExtras() != null) {
-            taskTitle.setText(intent.getExtras().get("TaskName").toString());
+            taskTitle.setText(intent.getExtras().get("taskName").toString());
         }
 
     }

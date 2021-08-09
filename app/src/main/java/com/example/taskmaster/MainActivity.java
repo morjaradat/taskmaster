@@ -23,8 +23,14 @@ public class MainActivity extends AppCompatActivity {
         Button allTask = findViewById(R.id.allTask);
         allTask.setOnClickListener(getViewAllTask);
 
-        Button taskDetail = findViewById(R.id.taskDetails);
-        taskDetail.setOnClickListener(getViewTaskDetail);
+        Button taskDetail1 = findViewById(R.id.taskDetails1);
+        taskDetail1.setOnClickListener(getViewTaskDetail1);
+
+        Button taskDetail2 = findViewById(R.id.taskDetails2);
+        taskDetail2.setOnClickListener(getViewTaskDetail2);
+
+        Button taskDetail3 = findViewById(R.id.taskDetails3);
+        taskDetail3.setOnClickListener(getViewTaskDetail3);
 
         Button setting = findViewById(R.id.setting);
         setting.setOnClickListener(getViewSetting);
@@ -41,19 +47,43 @@ public class MainActivity extends AppCompatActivity {
         userNameText.setText(username);
     }
 
-    private final View.OnClickListener getViewTaskDetail= new View.OnClickListener() {
+    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            Intent taskDetailIntent = new Intent(getBaseContext(),TaskDetails.class);
+            Button task1 = findViewById(R.id.taskDetails1);
+            String taskName = task1.getText().toString();
+            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetails.class);
+            taskDetailIntent.putExtra("taskName", taskName);
             startActivity(taskDetailIntent);
         }
     };
 
-    private final View.OnClickListener getViewSetting= new View.OnClickListener() {
+    private final View.OnClickListener getViewTaskDetail2 = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent settingIntent = new Intent(getBaseContext(),Setting.class);
+            Button task1 = findViewById(R.id.taskDetails2);
+            String taskName = task1.getText().toString();
+            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetails.class);
+            taskDetailIntent.putExtra("taskName", taskName);
+            startActivity(taskDetailIntent);
+        }
+    };
+
+    private final View.OnClickListener getViewTaskDetail3 = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Button task1 = findViewById(R.id.taskDetails3);
+            String taskName = task1.getText().toString();
+            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetails.class);
+            taskDetailIntent.putExtra("taskName", taskName);
+            startActivity(taskDetailIntent);
+        }
+    };
+
+    private final View.OnClickListener getViewSetting = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent settingIntent = new Intent(getBaseContext(), Setting.class);
             startActivity(settingIntent);
         }
     };
@@ -61,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private final View.OnClickListener getViewAddTask = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent addTaskIntent = new Intent(getBaseContext(),AddTask.class);
+            Intent addTaskIntent = new Intent(getBaseContext(), AddTask.class);
             startActivity(addTaskIntent);
         }
     };
@@ -69,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private final View.OnClickListener getViewAllTask = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent allTaskIntent = new Intent(getBaseContext(),AllTasks.class);
+            Intent allTaskIntent = new Intent(getBaseContext(), AllTasks.class);
             startActivity(allTaskIntent);
         }
     };

@@ -18,10 +18,12 @@ Screen Shots
 
 ![Main Activity](screenshots/lab-02/myTasks.jpg)
 
-![Add Tasks](screenshots/lab-02/addTask.jpg)
-
 ![Setting](screenshots/lab-02/setting.jpg)
 
-![Task Details](screenshots/lab-02/taskDetails.jpg)
-
 ![Main Activity after change username](screenshots/lab-02/myTaskAfterChangeUserName.jpg)
+
+![Task 1](screenshots/lab-02/task1.jpg)
+
+![Task 2](screenshots/lab-02/task2.jpg)
+
+![Task 3](screenshots/lab-02/task3.jpg)
