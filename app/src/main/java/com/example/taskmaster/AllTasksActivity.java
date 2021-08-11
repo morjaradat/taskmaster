@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class AllTasks extends AppCompatActivity {
+public class AllTasksActivity extends AppCompatActivity {
 
 
     @SuppressLint("RestrictedApi")
