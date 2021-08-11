@@ -10,8 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Taskmaster">
-        <activity android:name=".Setting" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".TaskDetails" android:parentActivityName=".MainActivity" />
+        <activity android:name=".SettingActivity" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".TaskDetailsActivity" android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,10 +20,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AllTasks"
+            android:name=".AllTasksActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".AddTask"
+            android:name=".AddTaskActivity"
             android:parentActivityName=".MainActivity" />
     </application>
 
