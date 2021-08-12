@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.taskmaster.DB.Task;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -57,12 +59,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     static  class  ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView taskTitle;
+        private TextView delete;
 //        private TextView taskBody;
 //        private TextView taskStatus;
 
         public ViewHolder(@NonNull  View itemView , onTaskClickedListener listener) {
             super(itemView);
             taskTitle = itemView.findViewById(R.id.task_title);
+            delete = itemView.findViewById(R.id.delete);
+
 //             taskBody = itemView.findViewById(R.id.task_body);
 //            taskStatus = itemView.findViewById(R.id.task_status);
 
@@ -70,6 +75,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     listener.onTaskClicked(getAdapterPosition());
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onDeleteTask(getAdapterPosition());
                 }
             });
         }

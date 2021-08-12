@@ -3,6 +3,7 @@ package com.example.taskmaster;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,11 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.taskmaster.DB.Task;
+import com.example.taskmaster.DB.TaskDao;
+import com.example.taskmaster.DB.TaskDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +26,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String TASK_TITLE = "taskTitle";
     public static final String TASK_BODY = "taskBody";
     public static final String TASK_STATUS = "taskStatus";
+    public static final String TASK_LIST = "TaskList";
     private List<Task> taskList;
     private Adapter adapter;
+
+    private TaskDatabase database;
+    private TaskDao taskDao;
 
 
     @Override
@@ -47,17 +57,25 @@ public class MainActivity extends AppCompatActivity {
         Button setting = findViewById(R.id.setting);
         setting.setOnClickListener(getViewSetting);
 
+        // Database initialization
+        database = Room.databaseBuilder(getApplicationContext(),TaskDatabase.class, TASK_LIST)
+                .allowMainThreadQueries().build();
+        taskDao = database.taskDao();
+
         // recycle view setup
         RecyclerView recyclerView = findViewById(R.id.recycler_task);
 
         // add task to the taskList
-        taskList = new ArrayList<>();
-        taskList.add(new Task("task 1","this task 1 for testing ","new"));
-        taskList.add(new Task("task 2","this task 2 for testing ","new"));
-        taskList.add(new Task("task 3","this task 3 for testing ","new"));
-        taskList.add(new Task("task 4","this task 4 for testing ","new"));
-        taskList.add(new Task("task 5","this task 5 for testing ","new"));
-        taskList.add(new Task("task 6","this task 6 for testing ","new"));
+        // get all task from database
+        taskList = taskDao.findAll();
+
+
+//        taskList.add(new Task("task 1","this task 1 for testing ","new"));
+//        taskList.add(new Task("task 2","this task 2 for testing ","new"));
+//        taskList.add(new Task("task 3","this task 3 for testing ","new"));
+//        taskList.add(new Task("task 4","this task 4 for testing ","new"));
+//        taskList.add(new Task("task 5","this task 5 for testing ","new"));
+//        taskList.add(new Task("task 6","this task 6 for testing ","new"));
 
         // link list to the adapter
         adapter = new Adapter(taskList, new Adapter.onTaskClickedListener() {
@@ -80,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onDeleteTask(int position) {
+                taskDao.delete(taskList.get(position));
+                taskList.remove(position);
+                listItemChanged();
+                Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
 
             }
         });

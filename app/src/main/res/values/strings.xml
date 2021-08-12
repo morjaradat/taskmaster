@@ -20,4 +20,5 @@
     <string name="username">username</string>
     <string name="setting_Title">Setting</string>
     <string name="update_username_title">Update UserName</string>
+    <string name="delete">delete</string>
 </resources>
