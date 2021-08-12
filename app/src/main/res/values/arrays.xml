@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="planets_array" >
-        <item>new</item>
+        <item name="test name">new</item>
         <item>assigned</item>
         <item>in progress</item>
         <item>complete</item>
