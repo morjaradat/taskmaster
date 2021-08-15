@@ -45,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
         Button allTask = findViewById(R.id.allTask);
         allTask.setOnClickListener(getViewAllTask);
 
-        Button taskDetail1 = findViewById(R.id.taskDetails1);
-        taskDetail1.setOnClickListener(getViewTaskDetail1);
-
-        Button taskDetail2 = findViewById(R.id.taskDetails2);
-        taskDetail2.setOnClickListener(getViewTaskDetail2);
-
-        Button taskDetail3 = findViewById(R.id.taskDetails3);
-        taskDetail3.setOnClickListener(getViewTaskDetail3);
+//        Button taskDetail1 = findViewById(R.id.taskDetails1);
+//        taskDetail1.setOnClickListener(getViewTaskDetail1);
+//
+//        Button taskDetail2 = findViewById(R.id.taskDetails2);
+//        taskDetail2.setOnClickListener(getViewTaskDetail2);
+//
+//        Button taskDetail3 = findViewById(R.id.taskDetails3);
+//        taskDetail3.setOnClickListener(getViewTaskDetail3);
 
         Button setting = findViewById(R.id.setting);
         setting.setOnClickListener(getViewSetting);
@@ -126,38 +126,38 @@ public class MainActivity extends AppCompatActivity {
         userNameText.setText(username);
     }
 
-    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Button task1 = findViewById(R.id.taskDetails1);
-            String taskName = task1.getText().toString();
-            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
-            taskDetailIntent.putExtra("taskName", taskName);
-            startActivity(taskDetailIntent);
-        }
-    };
-
-    private final View.OnClickListener getViewTaskDetail2 = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Button task1 = findViewById(R.id.taskDetails2);
-            String taskName = task1.getText().toString();
-            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
-            taskDetailIntent.putExtra("taskName", taskName);
-            startActivity(taskDetailIntent);
-        }
-    };
-
-    private final View.OnClickListener getViewTaskDetail3 = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Button task1 = findViewById(R.id.taskDetails3);
-            String taskName = task1.getText().toString();
-            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
-            taskDetailIntent.putExtra("taskName", taskName);
-            startActivity(taskDetailIntent);
-        }
-    };
+//    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Button task1 = findViewById(R.id.taskDetails1);
+//            String taskName = task1.getText().toString();
+//            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
+//            taskDetailIntent.putExtra("taskName", taskName);
+//            startActivity(taskDetailIntent);
+//        }
+//    };
+//
+//    private final View.OnClickListener getViewTaskDetail2 = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Button task1 = findViewById(R.id.taskDetails2);
+//            String taskName = task1.getText().toString();
+//            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
+//            taskDetailIntent.putExtra("taskName", taskName);
+//            startActivity(taskDetailIntent);
+//        }
+//    };
+//
+//    private final View.OnClickListener getViewTaskDetail3 = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Button task1 = findViewById(R.id.taskDetails3);
+//            String taskName = task1.getText().toString();
+//            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
+//            taskDetailIntent.putExtra("taskName", taskName);
+//            startActivity(taskDetailIntent);
+//        }
+//    };
 
     private final View.OnClickListener getViewSetting = new View.OnClickListener() {
         @Override
