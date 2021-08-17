@@ -55,3 +55,7 @@ Screen Shots
 # Data-to-taskmaster lab-31 Espresso test
 
 ![Task 2 details](screenshots/Tests/tests.png)
+
+# Data-to-taskmaster lab-32 Amplify AWS
+ 
+* Add Amplify AWS
