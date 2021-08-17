@@ -14,17 +14,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.example.taskmaster.DB.Task;
-import com.example.taskmaster.DB.TaskDao;
-import com.example.taskmaster.DB.TaskDatabase;
+//import com.example.taskmaster.DB.Task;
+//import com.example.taskmaster.DB.TaskDao;
+//import com.example.taskmaster.DB.TaskDatabase;
 
 public class AddTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTask";
     private String spinner_task_status=null;
 
-    private TaskDatabase database;
-    private TaskDao taskDao;
+//    private TaskDatabase database;
+//    private TaskDao taskDao;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -32,10 +32,11 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addtask_activity);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+//
+//        database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, MainActivity.TASK_LIST)
+//                .allowMainThreadQueries().build();
+//        taskDao = database.taskDao();
 
-        database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, MainActivity.TASK_LIST)
-                .allowMainThreadQueries().build();
-        taskDao = database.taskDao();
 
         Spinner spinner = findViewById(R.id.spinner_status);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -64,9 +65,10 @@ public class AddTaskActivity extends AppCompatActivity {
                 String taskTitle = ((EditText) findViewById(R.id.task_title_input)).getText().toString();
                 String taskBody = ((EditText) findViewById(R.id.task_body_input)).getText().toString();
                 String taskStatus = spinner_task_status;
-
-                taskDao.insertOne(new Task(taskTitle,taskBody,taskStatus));
-            Toast.makeText(getApplicationContext(),"task was added",Toast.LENGTH_LONG).show();
+//
+                MainActivity.saveDataToAmplify(taskTitle,taskBody,taskStatus);
+//                taskDao.insertOne(new Task(taskTitle,taskBody,taskStatus));
+//            Toast.makeText(getApplicationContext(),"task was added",Toast.LENGTH_LONG).show();
             }
         });
     }
