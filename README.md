@@ -59,3 +59,5 @@ Screen Shots
 # Data-to-taskmaster lab-32 Amplify AWS
  
 * Add Amplify AWS
+
+![img](./Screenshot217.png)

@@ -1,13 +1,18 @@
 package com.example.taskmaster;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -17,13 +22,13 @@ import android.widget.Toast;
 
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
-import com.amplifyframework.datastore.appsync.AppSyncClient;
 import com.amplifyframework.datastore.generated.model.Task;
-import com.ea.async.Async;
-//import com.example.taskmaster.DB.TaskDao;
-//import com.example.taskmaster.DB.TaskDatabase;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,31 +36,30 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-
     public static final String TASK_TITLE = "taskTitle";
     public static final String TASK_BODY = "taskBody";
     public static final String TASK_STATUS = "taskStatus";
     public static final String TASK_LIST = "TaskList";
-    private static List<Task> taskList;
+    private static final String TAG = "MainActivity";
+    private static List<Task> taskList = new ArrayList<>();
     private static Adapter adapter;
-//
-//    private TaskDatabase database;
-//    private TaskDao taskDao;
+    private Handler handler;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        taskList= new ArrayList<>();
         try {
-            Amplify.addPlugin(new AWSDataStorePlugin());
+//            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
 
-            Log.i("Tutorial", "Initialized Amplify");
+            Log.i(TAG, "Initialized Amplify");
         } catch (AmplifyException e) {
-            Log.e("Tutorial", "Could not initialize Amplify", e);
+            Log.e(TAG, "Could not initialize Amplify", e);
         }
-
 
         setContentView(R.layout.activity_main);
 
@@ -77,23 +81,27 @@ public class MainActivity extends AppCompatActivity {
         Button setting = findViewById(R.id.setting);
         setting.setOnClickListener(getViewSetting);
 
-        //Amplify AWS
-
-
-
-        // Database initialization
-//        database = Room.databaseBuilder(getApplicationContext(),TaskDatabase.class, TASK_LIST)
-//                .allowMainThreadQueries().build();
-//        taskDao = database.taskDao();
-
-        // recycle view setup
         RecyclerView recyclerView = findViewById(R.id.recycler_task);
 
-        // add task to the taskList
-        // get all task from database
 
 
-    taskList = getDataFromAmplify();
+        handler = new Handler(Looper.getMainLooper(),
+                new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(@NonNull Message message) {
+                        listItemChanged();
+                        return false;
+                    }
+                });
+
+        if (isNetworkAvailable(getApplicationContext())) {
+            getTaskDataFromAPI();
+            Log.i(TAG, "NET: the network is available");
+        } else {
+            getDataFromAmplify();
+            Log.i(TAG, "NET: net down");
+        }
+
 
         // link list to the adapter
         adapter = new Adapter(taskList, new Adapter.onTaskClickedListener() {
@@ -101,34 +109,38 @@ public class MainActivity extends AppCompatActivity {
             public void addTaskToTheList() {
 //                taskList.add(new Task("task 4","this task 4 for testing ","new"));
                 listItemChanged();
-
             }
 
             @Override
             public void onTaskClicked(int position) {
-                Intent taskDetailsIntent = new Intent(getApplicationContext(),TaskDetailsActivity.class);
-                taskDetailsIntent.putExtra(TASK_TITLE,taskList.get(position).getTitle());
-                taskDetailsIntent.putExtra(TASK_BODY,taskList.get(position).getDescription());
-                taskDetailsIntent.putExtra(TASK_STATUS,taskList.get(position).getStatus());
+                Intent taskDetailsIntent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
+                taskDetailsIntent.putExtra(TASK_TITLE, taskList.get(position).getTitle());
+                taskDetailsIntent.putExtra(TASK_BODY, taskList.get(position).getDescription());
+                taskDetailsIntent.putExtra(TASK_STATUS, taskList.get(position).getStatus());
                 startActivity(taskDetailsIntent);
 
             }
 
             @Override
             public void onDeleteTask(int position) {
+//                Task item = Task.builder().title(taskList.get(position).getTitle()).build();
+
+               Amplify.API.mutate(ModelMutation.delete(taskList.get(position)),
+                       response -> Log.i(TAG, "item deleted from API:" ),
+                       error -> Log.e(TAG, "Delete failed", error)
+               );
 
                 Amplify.DataStore.delete(taskList.get(position),
-                        success -> Log.i("Tutorial", "item deleted: " + success.item().toString()),
-                        failure -> Log.e("Tutorial", "Could not query DataStore", failure));
+                        success -> Log.i(TAG, "item deleted from datastore: " + success.item().toString()),
+                        failure -> Log.e(TAG, "Could not query DataStore", failure));
 
                 taskList.remove(position);
                 listItemChanged();
                 Toast.makeText(MainActivity.this, "Item deleted", Toast.LENGTH_SHORT).show();
-
             }
         });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -136,34 +148,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public static void  saveDataToAmplify(String title,String body ,String status){
+    public static void saveDataToAmplify(String title, String body, String status) {
         Task item = Task.builder().title(title).description(body).status(status).build();
 
         Amplify.DataStore.save(item,
-                success -> Log.i("Tutorial", "Saved item: " + success.item().toString()),
-                error -> Log.e("Tutorial", "Could not save item to DataStore", error)
+                success -> Log.i(TAG, "Saved item to data store : " + success.item().toString()),
+                error -> Log.e(TAG, "Could not save item to DataStore", error)
         );
         listItemChanged();
     }
 
-    public synchronized static List<Task> getDataFromAmplify(){
-        System.out.println("In get data");
-        List<Task> list = new ArrayList<>();
-        Amplify.DataStore.query(Task.class,todos ->{
-            while (todos.hasNext()) {
-                Task todo = todos.next();
-                list.add(todo);
-                Log.i("Tutorial", "==== Task ====");
-                        Log.i("Tutorial", "Name: " + todo.getTitle());
-                        Log.i("Tutorial", "status: " + todo.getStatus());
-                        Log.i("Tutorial", "==== Task End ====");
-            }
-        },                failure -> Log.e("Tutorial", "Could not query DataStore", failure)
+    public synchronized static void getDataFromAmplify() {
+        Amplify.DataStore.query(Task.class, todos -> {
+                    while (todos.hasNext()) {
+                        Task todo = todos.next();
+                        taskList.add(todo);
+                        Log.i(TAG, "Name FROM DATAStore : " + todo.getTitle());
+                        Log.i(TAG, "status  FROM DATAStore: " + todo.getStatus());
+                    }
+                }, failure -> Log.e(TAG, "Could not query DataStore", failure)
 
         );
 
-        return list;
     }
+
     private static void listItemChanged() {
         adapter.notifyDataSetChanged();
     }
@@ -175,7 +183,6 @@ public class MainActivity extends AppCompatActivity {
         String username = preference.getString("userName", "user") + "'s Tasks";
         TextView userNameText = (findViewById(R.id.usernameInHomePage));
         userNameText.setText(username);
-        getDataFromAmplify();
     }
 
 //    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
@@ -234,5 +241,32 @@ public class MainActivity extends AppCompatActivity {
             startActivity(allTaskIntent);
         }
     };
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager
+                .getActiveNetworkInfo().isConnected();
+    }
+
+    public static void saveTaskToAPI(Task item) {
+        Amplify.API.mutate(ModelMutation.create(item),
+                success -> Log.i(TAG, "Saved item to api : " + success.getData().getTitle()),
+                error -> Log.e(TAG, "Could not save item to API/dynamodb", error));
+
+    }
+
+    public  void getTaskDataFromAPI() {
+        Amplify.API.query(ModelQuery.list(Task.class),
+                response -> {
+                    for (Task task : response.getData()) {
+                        taskList.add(task);
+                        Log.i(TAG, "getFrom api: the Task from api are => " + task.getTitle());
+                    }
+                    handler.sendEmptyMessage(1);
+                },
+                error -> Log.e(TAG, "getFrom api: Failed to get Task from api => " + error.toString())
+        );
+    }
 
 }

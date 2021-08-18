@@ -81,5 +81,7 @@ dependencies {
 
     implementation 'com.amplifyframework:aws-api:1.24.0'
     implementation 'com.amplifyframework:aws-datastore:1.24.0'
+    implementation 'com.amplifyframework:core:1.24.0'
+
     implementation 'com.ea.async:ea-async:1.2.3'
 }

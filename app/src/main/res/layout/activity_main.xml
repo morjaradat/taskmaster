@@ -19,8 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/usernameInHomePage"
         app:layout_constraintVertical_bias="0.056"
-        android:background="#F6F6F6"
-        />
+        android:background="#F6F6F6" />
 
     <TextView
         android:id="@+id/textView"
@@ -46,42 +45,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <Button-->
-<!--        android:id="@+id/taskDetails1"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="52dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:text="@string/task_detail1"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/taskDetails2"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/addTask" />-->
+    <!--    <Button-->
+    <!--        android:id="@+id/taskDetails1"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="52dp"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:text="@string/task_detail1"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/taskDetails2"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/addTask" />-->
 
-<!--    <Button-->
-<!--        android:id="@+id/taskDetails2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:text="@string/task_detail2"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/taskDetails3"-->
-<!--        app:layout_constraintHorizontal_bias="0.173"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/taskDetails1"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/allTask" />-->
+    <!--    <Button-->
+    <!--        android:id="@+id/taskDetails2"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:text="@string/task_detail2"-->
+    <!--        app:layout_constraintEnd_toStartOf="@+id/taskDetails3"-->
+    <!--        app:layout_constraintHorizontal_bias="0.173"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/taskDetails1"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/allTask" />-->
 
-<!--    <Button-->
-<!--        android:id="@+id/taskDetails3"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="60dp"-->
-<!--        android:text="@string/task_detail3"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/taskDetails2"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/allTask" />-->
+    <!--    <Button-->
+    <!--        android:id="@+id/taskDetails3"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:layout_marginEnd="60dp"-->
+    <!--        android:text="@string/task_detail3"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/taskDetails2"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/allTask" />-->
 
     <Button
         android:id="@+id/allTask"
@@ -98,7 +97,6 @@
         tools:ignore="MissingConstraints" />
 
 
-
     <Button
         android:id="@+id/addTask"
         android:layout_width="wrap_content"
@@ -111,7 +109,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:ignore="MissingConstraints" />
-
 
 
     <TextView
