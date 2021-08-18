@@ -28,27 +28,26 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     // InterFace for Events listener
-    public interface onTaskClickedListener{
+    public interface onTaskClickedListener {
         void addTaskToTheList();
+
         void onTaskClicked(int position);
+
         void onDeleteTask(int position);
     }
 
 
     @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout,parent,false);
-        return new ViewHolder(view,listener);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
+        return new ViewHolder(view, listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  Adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
         Task taskItem = taskItems.get(position);
         holder.taskTitle.setText(taskItem.getTitle());
-//        holder.taskBody.setText(taskItem.getBody());
-//        holder.taskStatus.setText(taskItem.getState());
-
     }
 
     @Override
@@ -57,14 +56,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     }
 
     // The  View Adapter
-    static  class  ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView taskTitle;
         private TextView delete;
 //        private TextView taskBody;
 //        private TextView taskStatus;
 
-        public ViewHolder(@NonNull  View itemView , onTaskClickedListener listener) {
+        public ViewHolder(@NonNull View itemView, onTaskClickedListener listener) {
             super(itemView);
             taskTitle = itemView.findViewById(R.id.task_title);
             delete = itemView.findViewById(R.id.delete);

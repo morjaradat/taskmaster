@@ -1,7 +1,6 @@
 package com.example.taskmaster;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,19 +11,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
-//import com.example.taskmaster.DB.Task;
-//import com.example.taskmaster.DB.TaskDao;
-//import com.example.taskmaster.DB.TaskDatabase;
+import com.amplifyframework.datastore.generated.model.Task;
+
+
 
 public class AddTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTask";
-    private String spinner_task_status=null;
+    private String spinner_task_status = null;
 
-//    private TaskDatabase database;
-//    private TaskDao taskDao;
+
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -32,10 +29,7 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addtask_activity);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-//
-//        database = Room.databaseBuilder(getApplicationContext(), TaskDatabase.class, MainActivity.TASK_LIST)
-//                .allowMainThreadQueries().build();
-//        taskDao = database.taskDao();
+
 
 
         Spinner spinner = findViewById(R.id.spinner_status);
@@ -65,10 +59,16 @@ public class AddTaskActivity extends AppCompatActivity {
                 String taskTitle = ((EditText) findViewById(R.id.task_title_input)).getText().toString();
                 String taskBody = ((EditText) findViewById(R.id.task_body_input)).getText().toString();
                 String taskStatus = spinner_task_status;
-//
-                MainActivity.saveDataToAmplify(taskTitle,taskBody,taskStatus);
+
+
+                Task item = Task.builder().title(taskTitle).description(taskBody).status(taskStatus).build();
+                MainActivity.saveTaskToAPI(item);
+
+//                MainActivity.saveDataToAmplify(taskTitle, taskBody, taskStatus);
+                Toast.makeText(getApplicationContext(), "task was added", Toast.LENGTH_LONG).show();
+
+                //room method
 //                taskDao.insertOne(new Task(taskTitle,taskBody,taskStatus));
-//            Toast.makeText(getApplicationContext(),"task was added",Toast.LENGTH_LONG).show();
             }
         });
     }

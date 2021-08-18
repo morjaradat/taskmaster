@@ -25,7 +25,7 @@ public class SettingActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 String userName = ((EditText) findViewById(R.id.updateFormUserName)).getText().toString();
-                editor.putString("userName",userName);
+                editor.putString("userName", userName);
                 editor.apply();
 
                 Toast.makeText(SettingActivity.this, "UserName Updated", Toast.LENGTH_SHORT).show();
