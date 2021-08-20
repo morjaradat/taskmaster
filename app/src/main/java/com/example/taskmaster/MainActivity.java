@@ -28,6 +28,7 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 
 
 import java.util.ArrayList;
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private static List<Task> taskList = new ArrayList<>();
     private static Adapter adapter;
     private Handler handler;
-
+    private Team teamData = null;
+    private String selectedTeam=null;
 
 
     @Override
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Could not initialize Amplify", e);
         }
 
+        Log.i(TAG, "onCreate: called");
+
         setContentView(R.layout.activity_main);
 
         Button addTask = findViewById(R.id.addTask);
@@ -68,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button allTask = findViewById(R.id.allTask);
         allTask.setOnClickListener(getViewAllTask);
+
+        Button setting = findViewById(R.id.setting);
+        setting.setOnClickListener(getViewSetting);
 
 //        Button taskDetail1 = findViewById(R.id.taskDetails1);
 //        taskDetail1.setOnClickListener(getViewTaskDetail1);
@@ -78,12 +85,15 @@ public class MainActivity extends AppCompatActivity {
 //        Button taskDetail3 = findViewById(R.id.taskDetails3);
 //        taskDetail3.setOnClickListener(getViewTaskDetail3);
 
-        Button setting = findViewById(R.id.setting);
-        setting.setOnClickListener(getViewSetting);
+
 
         RecyclerView recyclerView = findViewById(R.id.recycler_task);
 
-
+//              Team team = Team.builder().name("team 3").build();
+//
+//        Amplify.API.mutate(ModelMutation.create(team),
+//                success -> Log.i(TAG, "Saved Team to api : " + success.getData()),
+//                error -> Log.e(TAG, "Could not save Team to API/dynamodb", error));
 
         handler = new Handler(Looper.getMainLooper(),
                 new Handler.Callback() {
@@ -130,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
                        error -> Log.e(TAG, "Delete failed", error)
                );
 
-                Amplify.DataStore.delete(taskList.get(position),
-                        success -> Log.i(TAG, "item deleted from datastore: " + success.item().toString()),
-                        failure -> Log.e(TAG, "Could not query DataStore", failure));
+//                Amplify.DataStore.delete(taskList.get(position),
+//                        success -> Log.i(TAG, "item deleted from datastore: " + success.item().toString()),
+//                        failure -> Log.e(TAG, "Could not query DataStore", failure));
 
                 taskList.remove(position);
                 listItemChanged();
@@ -146,6 +156,33 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String username = preference.getString("userName", "user") + "'s Tasks";
+        String teamName =preference.getString("teamName", "choose your team");
+        TextView userNameText = (findViewById(R.id.usernameInHomePage));
+        TextView teamText = (findViewById(R.id.Team));
+        teamText.setText(teamName);
+        userNameText.setText(username);
+        selectedTeam= preference.getString("teamName",null);
+        if (selectedTeam!= null){
+            getTeamFromApiByName();
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            taskList.clear();
+            Log.i(TAG, "-----selected team true-------- ");
+            Log.i(TAG, selectedTeam);
+            getTaskDataFromAPIByTeam();
+        }
+        Log.i(TAG, "onResume: called");
     }
 
     public static void saveDataToAmplify(String title, String body, String status) {
@@ -176,16 +213,91 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String username = preference.getString("userName", "user") + "'s Tasks";
-        TextView userNameText = (findViewById(R.id.usernameInHomePage));
-        userNameText.setText(username);
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager =
+                ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager
+                .getActiveNetworkInfo().isConnected();
     }
 
-//    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
+    public static void saveTaskToAPI(Task item) {
+        Amplify.API.mutate(ModelMutation.create(item),
+                success -> Log.i(TAG, "Saved item to api : " + success.getData()),
+                error -> Log.e(TAG, "Could not save item to API/dynamodb", error));
+    }
+
+    public  void getTaskDataFromAPI()  {
+        Log.i(TAG, "getTaskDataFromAPI: get all data");
+            Amplify.API.query(ModelQuery.list(Task.class),
+                    response -> {
+                        for (Task task : response.getData()) {
+                            taskList.add(task);
+                            Log.i(TAG, "getFrom api: the Task from api are => " + task);
+//                            Log.i(TAG, "getFrom api: the Task from api are => " + task.getTeam());
+                        }
+                        handler.sendEmptyMessage(1);
+                    },
+                    error -> Log.e(TAG, "getFrom api: Failed to get Task from api => " + error.toString())
+            );
+    }
+
+    public  void  getTaskDataFromAPIByTeam(){
+        Log.i(TAG, "getTaskDataFromAPIByTeam: get task by team");
+
+        Amplify.API.query(ModelQuery.list(Task.class, Task.TEAM.contains(teamData.getId())),
+                response -> {
+                    for (Task task : response.getData()) {
+
+                            Log.i(TAG, "task-team-id: " + task.getTeam().getId());
+                            Log.i(TAG, "team-id: "+ teamData.getId());
+                            taskList.add(task);
+
+                        Log.i(TAG, "getFrom api by team: the Task from api are => " + task);
+                    }
+                    handler.sendEmptyMessage(1);
+                },
+                error -> Log.e(TAG, "getFrom api: Failed to get Task from api => " + error.toString())
+        );
+    }
+
+    public void getTeamFromApiByName() {
+            Amplify.API.query(
+                    ModelQuery.list(Team.class, Team.NAME.contains(selectedTeam)),
+                    response -> {
+                        for (Team teamDetail : response.getData()) {
+                            Log.i(TAG, "selected team is  =>"+teamDetail);
+                            teamData=teamDetail;
+                        }
+                    },
+                    error -> Log.e(TAG, "Query failure", error)
+            );
+    }
+
+    private final View.OnClickListener getViewSetting = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent settingIntent = new Intent(getBaseContext(), SettingActivity.class);
+            startActivity(settingIntent);
+        }
+    };
+
+    private final View.OnClickListener getViewAddTask = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent addTaskIntent = new Intent(getBaseContext(), AddTaskActivity.class);
+            startActivity(addTaskIntent);
+        }
+    };
+
+    private final View.OnClickListener getViewAllTask = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent allTaskIntent = new Intent(getBaseContext(), AllTasksActivity.class);
+            startActivity(allTaskIntent);
+        }
+    };
+
+    //    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
 //        @Override
 //        public void onClick(View v) {
 //            Button task1 = findViewById(R.id.taskDetails1);
@@ -217,56 +329,4 @@ public class MainActivity extends AppCompatActivity {
 //            startActivity(taskDetailIntent);
 //        }
 //    };
-
-    private final View.OnClickListener getViewSetting = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent settingIntent = new Intent(getBaseContext(), SettingActivity.class);
-            startActivity(settingIntent);
-        }
-    };
-
-    private final View.OnClickListener getViewAddTask = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent addTaskIntent = new Intent(getBaseContext(), AddTaskActivity.class);
-            startActivity(addTaskIntent);
-        }
-    };
-
-    private final View.OnClickListener getViewAllTask = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent allTaskIntent = new Intent(getBaseContext(), AllTasksActivity.class);
-            startActivity(allTaskIntent);
-        }
-    };
-
-    public boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager =
-                ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager
-                .getActiveNetworkInfo().isConnected();
-    }
-
-    public static void saveTaskToAPI(Task item) {
-        Amplify.API.mutate(ModelMutation.create(item),
-                success -> Log.i(TAG, "Saved item to api : " + success.getData().getTitle()),
-                error -> Log.e(TAG, "Could not save item to API/dynamodb", error));
-
-    }
-
-    public  void getTaskDataFromAPI() {
-        Amplify.API.query(ModelQuery.list(Task.class),
-                response -> {
-                    for (Task task : response.getData()) {
-                        taskList.add(task);
-                        Log.i(TAG, "getFrom api: the Task from api are => " + task.getTitle());
-                    }
-                    handler.sendEmptyMessage(1);
-                },
-                error -> Log.e(TAG, "getFrom api: Failed to get Task from api => " + error.toString())
-        );
-    }
-
 }

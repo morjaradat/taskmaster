@@ -12,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="401dp"
         android:layout_margin="15dp"
+        android:background="#F6F6F6"
         android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/allTask"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.206"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameInHomePage"
-        app:layout_constraintVertical_bias="0.056"
-        android:background="#F6F6F6" />
+        app:layout_constraintTop_toBottomOf="@+id/Team"
+        app:layout_constraintVertical_bias="0.056" />
 
     <TextView
         android:id="@+id/textView"
@@ -82,43 +82,55 @@
     <!--        app:layout_constraintStart_toEndOf="@+id/taskDetails2"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/allTask" />-->
 
+
     <Button
         android:id="@+id/allTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="452dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="60dp"
         android:text="@string/all_Task"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
-        app:layout_constraintStart_toEndOf="@+id/addTask"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_task"
         tools:ignore="MissingConstraints" />
-
 
     <Button
         android:id="@+id/addTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="452dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="10dp"
         android:text="@string/add_Task"
         app:layout_constraintEnd_toStartOf="@+id/allTask"
+        app:layout_constraintHorizontal_bias="0.616"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_task"
         tools:ignore="MissingConstraints" />
-
 
     <TextView
         android:id="@+id/usernameInHomePage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:text="username"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.432"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/Team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="You don't choose any Team"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_task"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.439"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameInHomePage"
+        app:layout_constraintVertical_bias="0.583" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
