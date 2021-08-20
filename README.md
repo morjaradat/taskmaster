@@ -61,3 +61,17 @@ Screen Shots
 * Add Amplify AWS
 
 ![img](./Screenshot217.png)
+
+# Data-to-taskmaster lab-33  Related Data
+
+![Main activity with team 2 selected](screenshots/lab-33/team2selected.png)
+
+![add new task for team 2 ](screenshots/lab-33/addNewTaskForTeam2.png)
+
+![Main activity after add new task for team 2](screenshots/lab-33/afterAddNewTaskForTeam2.png)
+
+![change the team to team 3 from setting](screenshots/lab-33/changeToTeam3.png)
+
+![Main activity with team 2 selected](screenshots/lab-33/team3selected.png)
+
+

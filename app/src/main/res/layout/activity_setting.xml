@@ -53,12 +53,63 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/updateFormUserName">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Choose a Team"
+            android:textSize="23sp" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/chooseTeam1"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="ChooseTeam"
+                android:text="team 1" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/chooseTeam2"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="ChooseTeam"
+                android:text="team 2" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/chooseTeam3"
+                style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="ChooseTeam"
+                android:text="team 3" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/updateUserNameButton"
         android:layout_width="104dp"
         android:layout_height="52dp"
         android:layout_marginStart="152dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="140dp"
         android:text="@string/update"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/updateFormUserName" />

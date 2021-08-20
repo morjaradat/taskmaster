@@ -5,12 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 public class SettingActivity extends AppCompatActivity {
+
+    private static final String TAG = "SettingActivity";
+    private String teamName= null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +31,39 @@ public class SettingActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 String userName = ((EditText) findViewById(R.id.updateFormUserName)).getText().toString();
                 editor.putString("userName", userName);
+                editor.putString("teamName", teamName);
                 editor.apply();
 
-                Toast.makeText(SettingActivity.this, "UserName Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this, "UserName and Team Updated", Toast.LENGTH_SHORT).show();
 
 //                Intent newIntent = new Intent(getApplicationContext(),MainActivity.class);
 //                startActivity(newIntent);
             }
         });
+    }
+
+    public void ChooseTeam(View view){
+        boolean checked = ((RadioButton) view).isChecked();
+        switch (view.getId()){
+
+            case R.id.chooseTeam1:
+                if (checked)
+                    Log.i(TAG, "onClickRadioButton: team 1");
+                teamName= "team 1";
+
+                break;
+            case R.id.chooseTeam2:
+                if (checked)
+                    Log.i(TAG, "onClickRadioButton: team 2");
+                teamName= "team 2";
+
+                break;
+            case R.id.chooseTeam3:
+                if (checked)
+                    Log.i(TAG, "onClickRadioButton: team 3");
+                teamName= "team 3";
+
+                break;
+        }
     }
 }

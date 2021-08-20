@@ -2,24 +2,29 @@ package com.example.taskmaster;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
-
+import com.amplifyframework.datastore.generated.model.Team;
 
 
 public class AddTaskActivity extends AppCompatActivity {
 
     private static final String TAG = "AddTask";
     private String spinner_task_status = null;
+    private Team teamData = null;
 
 
 
@@ -60,8 +65,21 @@ public class AddTaskActivity extends AppCompatActivity {
                 String taskBody = ((EditText) findViewById(R.id.task_body_input)).getText().toString();
                 String taskStatus = spinner_task_status;
 
+//                Team team = Team.builder().name(teamName).build();
 
-                Task item = Task.builder().title(taskTitle).description(taskBody).status(taskStatus).build();
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Task item = Task.builder()
+                        .title(taskTitle)
+                        .description(taskBody)
+                        .status(taskStatus)
+                        .team(teamData)
+                        .build();
+
                 MainActivity.saveTaskToAPI(item);
 
 //                MainActivity.saveDataToAmplify(taskTitle, taskBody, taskStatus);
@@ -71,6 +89,43 @@ public class AddTaskActivity extends AppCompatActivity {
 //                taskDao.insertOne(new Task(taskTitle,taskBody,taskStatus));
             }
         });
+    }
+
+    public void onClickRadioButton(View view){
+        boolean checked = ((RadioButton) view).isChecked();
+        switch (view.getId()){
+
+            case R.id.team1:
+                if (checked)
+                    Log.i(TAG, "onClickRadioButton: team 1");
+                getTeamDetailFromAPIByName("team 1");
+                    break;
+            case R.id.team2:
+                if (checked)
+                    Log.i(TAG, "onClickRadioButton: team 2");
+                getTeamDetailFromAPIByName("team 2");
+
+                break;
+            case R.id.team3:
+                if (checked)
+                    Log.i(TAG, "onClickRadioButton: team 3");
+                getTeamDetailFromAPIByName("team 3");
+
+                break;
+        }
+    }
+
+    public void getTeamDetailFromAPIByName(String name) {
+        Amplify.API.query(
+                ModelQuery.list(Team.class, Team.NAME.contains(name)),
+                response -> {
+                    for (Team teamDetail : response.getData()) {
+                        Log.i(TAG, "the team name is =>"+teamDetail.getName());
+                        teamData=teamDetail;
+                    }
+                },
+                error -> Log.e(TAG, "Query failure", error)
+        );
     }
 
 }
