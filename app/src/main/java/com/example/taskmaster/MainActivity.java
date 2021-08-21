@@ -1,10 +1,5 @@
 package com.example.taskmaster;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -20,16 +14,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String TASK_TITLE = "taskTitle";
     public static final String TASK_BODY = "taskBody";
     public static final String TASK_STATUS = "taskStatus";
-    public static final String TASK_LIST = "TaskList";
     private static final String TAG = "MainActivity";
     private static List<Task> taskList = new ArrayList<>();
     private static Adapter adapter;
@@ -96,12 +90,9 @@ public class MainActivity extends AppCompatActivity {
 //                error -> Log.e(TAG, "Could not save Team to API/dynamodb", error));
 
         handler = new Handler(Looper.getMainLooper(),
-                new Handler.Callback() {
-                    @Override
-                    public boolean handleMessage(@NonNull Message message) {
-                        listItemChanged();
-                        return false;
-                    }
+                message -> {
+                    listItemChanged();
+                    return false;
                 });
 
         if (isNetworkAvailable(getApplicationContext())) {
@@ -115,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
 
         // link list to the adapter
         adapter = new Adapter(taskList, new Adapter.onTaskClickedListener() {
-            @Override
-            public void addTaskToTheList() {
-//                taskList.add(new Task("task 4","this task 4 for testing ","new"));
-                listItemChanged();
-            }
+//            @Override
+//            public void addTaskToTheList() {
+////                taskList.add(new Task("task 4","this task 4 for testing ","new"));
+//                listItemChanged();
+//            }
 
             @Override
             public void onTaskClicked(int position) {
@@ -185,15 +176,15 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onResume: called");
     }
 
-    public static void saveDataToAmplify(String title, String body, String status) {
-        Task item = Task.builder().title(title).description(body).status(status).build();
-
-        Amplify.DataStore.save(item,
-                success -> Log.i(TAG, "Saved item to data store : " + success.item().toString()),
-                error -> Log.e(TAG, "Could not save item to DataStore", error)
-        );
-        listItemChanged();
-    }
+//    public static void saveDataToAmplify(String title, String body, String status) {
+//        Task item = Task.builder().title(title).description(body).status(status).build();
+//
+//        Amplify.DataStore.save(item,
+//                success -> Log.i(TAG, "Saved item to data store : " + success.item().toString()),
+//                error -> Log.e(TAG, "Could not save item to DataStore", error)
+//        );
+//        listItemChanged();
+//    }
 
     public synchronized static void getDataFromAmplify() {
         Amplify.DataStore.query(Task.class, todos -> {
@@ -273,28 +264,19 @@ public class MainActivity extends AppCompatActivity {
             );
     }
 
-    private final View.OnClickListener getViewSetting = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent settingIntent = new Intent(getBaseContext(), SettingActivity.class);
-            startActivity(settingIntent);
-        }
+    private final View.OnClickListener getViewSetting = v -> {
+        Intent settingIntent = new Intent(getBaseContext(), SettingActivity.class);
+        startActivity(settingIntent);
     };
 
-    private final View.OnClickListener getViewAddTask = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent addTaskIntent = new Intent(getBaseContext(), AddTaskActivity.class);
-            startActivity(addTaskIntent);
-        }
+    private final View.OnClickListener getViewAddTask = v -> {
+        Intent addTaskIntent = new Intent(getBaseContext(), AddTaskActivity.class);
+        startActivity(addTaskIntent);
     };
 
-    private final View.OnClickListener getViewAllTask = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent allTaskIntent = new Intent(getBaseContext(), AllTasksActivity.class);
-            startActivity(allTaskIntent);
-        }
+    private final View.OnClickListener getViewAllTask = v -> {
+        Intent allTaskIntent = new Intent(getBaseContext(), AllTasksActivity.class);
+        startActivity(allTaskIntent);
     };
 
     //    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {

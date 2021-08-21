@@ -19,6 +19,8 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
+import java.util.Objects;
+
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -33,7 +35,7 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addtask_activity);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
 
 
 
@@ -58,39 +60,37 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
         Button newTaskCreateButton = findViewById(R.id.submit_Button_AddTask);
-        newTaskCreateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String taskTitle = ((EditText) findViewById(R.id.task_title_input)).getText().toString();
-                String taskBody = ((EditText) findViewById(R.id.task_body_input)).getText().toString();
-                String taskStatus = spinner_task_status;
+        newTaskCreateButton.setOnClickListener(v -> {
+            String taskTitle = ((EditText) findViewById(R.id.task_title_input)).getText().toString();
+            String taskBody = ((EditText) findViewById(R.id.task_body_input)).getText().toString();
+            String taskStatus = spinner_task_status;
 
 //                Team team = Team.builder().name(teamName).build();
 
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-                Task item = Task.builder()
-                        .title(taskTitle)
-                        .description(taskBody)
-                        .status(taskStatus)
-                        .team(teamData)
-                        .build();
+            Task item = Task.builder()
+                    .title(taskTitle)
+                    .description(taskBody)
+                    .status(taskStatus)
+                    .team(teamData)
+                    .build();
 
-                MainActivity.saveTaskToAPI(item);
+            MainActivity.saveTaskToAPI(item);
 
 //                MainActivity.saveDataToAmplify(taskTitle, taskBody, taskStatus);
-                Toast.makeText(getApplicationContext(), "task was added", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "task was added", Toast.LENGTH_LONG).show();
 
-                //room method
+            //room method
 //                taskDao.insertOne(new Task(taskTitle,taskBody,taskStatus));
-            }
         });
     }
 
+    @SuppressLint("NonConstantResourceId")
     public void onClickRadioButton(View view){
         boolean checked = ((RadioButton) view).isChecked();
         switch (view.getId()){
