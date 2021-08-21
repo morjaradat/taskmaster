@@ -2,6 +2,7 @@ package com.example.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,25 +24,23 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         Button updateUserName = findViewById(R.id.updateUserNameButton);
-        updateUserName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        updateUserName.setOnClickListener(v -> {
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                String userName = ((EditText) findViewById(R.id.updateFormUserName)).getText().toString();
-                editor.putString("userName", userName);
-                editor.putString("teamName", teamName);
-                editor.apply();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String userName = ((EditText) findViewById(R.id.updateFormUserName)).getText().toString();
+            editor.putString("userName", userName);
+            editor.putString("teamName", teamName);
+            editor.apply();
 
-                Toast.makeText(SettingActivity.this, "UserName and Team Updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingActivity.this, "UserName and Team Updated", Toast.LENGTH_SHORT).show();
 
 //                Intent newIntent = new Intent(getApplicationContext(),MainActivity.class);
 //                startActivity(newIntent);
-            }
         });
     }
 
+    @SuppressLint("NonConstantResourceId")
     public void ChooseTeam(View view){
         boolean checked = ((RadioButton) view).isChecked();
         switch (view.getId()){

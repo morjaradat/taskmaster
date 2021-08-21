@@ -51,7 +51,8 @@
         android:textAlignment="viewStart"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:ignore="LabelFor" />
 
 
     <LinearLayout
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="Choose a Team"
+            android:text="@string/choose_a_team"
             android:textSize="23sp" />
 
         <RadioGroup
@@ -82,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="ChooseTeam"
-                android:text="team 1" />
+                android:text="@string/team_1" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/chooseTeam2"
@@ -90,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="ChooseTeam"
-                android:text="team 2" />
+                android:text="@string/team_2" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/chooseTeam3"
@@ -98,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="ChooseTeam"
-                android:text="team 3" />
+                android:text="@string/team_3" />
 
         </RadioGroup>
 

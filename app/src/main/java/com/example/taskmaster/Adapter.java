@@ -19,7 +19,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     private final List<Task> taskItems;
-    private onTaskClickedListener listener;
+    private final onTaskClickedListener listener;
 
     // constructor
     public Adapter(List<Task> taskItems, onTaskClickedListener listener) {
@@ -29,7 +29,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     // InterFace for Events listener
     public interface onTaskClickedListener {
-        void addTaskToTheList();
+//        void addTaskToTheList();
 
         void onTaskClicked(int position);
 
@@ -58,32 +58,21 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     // The  View Adapter
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView taskTitle;
-        private TextView delete;
-//        private TextView taskBody;
+        private final TextView taskTitle;
+        //        private TextView taskBody;
 //        private TextView taskStatus;
 
         public ViewHolder(@NonNull View itemView, onTaskClickedListener listener) {
             super(itemView);
             taskTitle = itemView.findViewById(R.id.task_title);
-            delete = itemView.findViewById(R.id.delete);
+            TextView delete = itemView.findViewById(R.id.delete);
 
 //             taskBody = itemView.findViewById(R.id.task_body);
 //            taskStatus = itemView.findViewById(R.id.task_status);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onTaskClicked(getAdapterPosition());
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onTaskClicked(getBindingAdapterPosition()));
 
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onDeleteTask(getAdapterPosition());
-                }
-            });
+            delete.setOnClickListener(v -> listener.onDeleteTask(getBindingAdapterPosition()));
         }
     }
 }
