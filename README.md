@@ -58,7 +58,6 @@ Screen Shots
 
 # Data-to-taskmaster lab-32 Amplify AWS
  
-* Add Amplify AWS
 
 ![img](./Screenshot217.png)
 
@@ -73,5 +72,25 @@ Screen Shots
 ![change the team to team 3 from setting](screenshots/lab-33/changeToTeam3.png)
 
 ![Main activity with team 2 selected](screenshots/lab-33/team3selected.png)
+
+
+# Data-to-taskmaster Lab: 36 - Cognito
+
+![login](screenshots/lab-36/login.png)
+
+![signup](screenshots/lab-36/signup.png)
+
+![signup- create new user](screenshots/lab-36/signup_newUser.png)
+
+![verification](screenshots/lab-36/verification.png)
+
+![verification with code](screenshots/lab-36/verification_code.png)
+
+![login after verification](screenshots/lab-36/loginWithUser.png)
+
+![main activity](screenshots/lab-36/mainActivity_with_username_logout.png)
+
+![after logout ](screenshots/lab-36/login.png)
+
 
 
