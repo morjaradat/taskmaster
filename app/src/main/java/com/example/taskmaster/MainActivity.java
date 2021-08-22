@@ -1,5 +1,6 @@
 package com.example.taskmaster;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,8 @@ import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthUser;
+import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private Team teamData = null;
     private String selectedTeam=null;
+    private String Username = null;
 
 
     @Override
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         taskList= new ArrayList<>();
         try {
 //            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
 
@@ -56,6 +61,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (AmplifyException e) {
             Log.e(TAG, "Could not initialize Amplify", e);
         }
+
+        if (Amplify.Auth.getCurrentUser()!= null){
+            Log.i(TAG, "Auth: " + Amplify.Auth.getCurrentUser().toString());
+        }else {
+            Log.i(TAG, "Auth:  no user " + Amplify.Auth.getCurrentUser());
+            Intent goToLogin= new Intent(this,LoginActivity.class);
+            startActivity(goToLogin);
+        }
+
+//        TextView userNameText = (findViewById(R.id.usernameInHomePage));
+
 
         Log.i(TAG, "onCreate: called");
 
@@ -69,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
 
         Button setting = findViewById(R.id.setting);
         setting.setOnClickListener(getViewSetting);
+
+        Button logout = findViewById(R.id.logout);
+       logout.setOnClickListener(v -> logout());
+
+
 
 //        Button taskDetail1 = findViewById(R.id.taskDetails1);
 //        taskDetail1.setOnClickListener(getViewTaskDetail1);
@@ -149,16 +170,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String username = preference.getString("userName", "user") + "'s Tasks";
+//        String username = preference.getString("userName", "user") + "'s Tasks";
         String teamName =preference.getString("teamName", "choose your team");
-        TextView userNameText = (findViewById(R.id.usernameInHomePage));
+
+
+        if (Amplify.Auth.getCurrentUser()!= null){
+            TextView userNameText = (findViewById(R.id.usernameInHomePage));
+            userNameText.setText(Amplify.Auth.getCurrentUser().getUsername()+ "'s Tasks");
+        }else {
+            Intent goToLogin= new Intent(this,LoginActivity.class);
+            startActivity(goToLogin);
+        }
+
         TextView teamText = (findViewById(R.id.Team));
         teamText.setText(teamName);
-        userNameText.setText(username);
+
         selectedTeam= preference.getString("teamName",null);
         if (selectedTeam!= null){
             getTeamFromApiByName();
@@ -311,4 +342,22 @@ public class MainActivity extends AppCompatActivity {
 //            startActivity(taskDetailIntent);
 //        }
 //    };
+    public  void getCurrentUser() {
+        AuthUser authUser = Amplify.Auth.getCurrentUser();
+        Username = authUser.getUsername();
+        Log.i(TAG, "getCurrentUser: " + authUser.toString());
+        Log.i(TAG, "getCurrentUser: username" + authUser.getUsername());
+        Log.i(TAG, "getCurrentUser: userId" + authUser.getUserId());
+    }
+
+    public void logout(){
+        Amplify.Auth.signOut(
+                () ->{
+                    Log.i("AuthQuickstart", "Signed out successfully");
+                    Intent goToLogin = new Intent(getBaseContext(), LoginActivity.class);
+                    startActivity(goToLogin);
+                } ,
+                error -> Log.e("AuthQuickstart", error.toString())
+        );
+    }
 }

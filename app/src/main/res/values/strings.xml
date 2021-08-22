@@ -40,4 +40,13 @@
     <string name="team_2_radio">team 2</string>
     <string name="team_3_radio">team 3</string>
     <string name="task_title_card">Task title</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">password</string>
+    <string name="log_in">Login</string>
+    <string name="signup">signup</string>
+    <string name="verification">Verification</string>
+    <string name="enter_verification_code">Enter verification code</string>
+    <string name="verify">verify</string>
+    <string name="logout">logout</string>
 </resources>
