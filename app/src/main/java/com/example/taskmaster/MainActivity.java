@@ -28,6 +28,7 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TASK_TITLE = "taskTitle";
     public static final String TASK_BODY = "taskBody";
     public static final String TASK_STATUS = "taskStatus";
+    public static final String TASK_FILE = "taskFile";
     private static final String TAG = "MainActivity";
     private static List<Task> taskList = new ArrayList<>();
     private static Adapter adapter;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private Team teamData = null;
     private String selectedTeam=null;
     private String Username = null;
+
 
 
     @Override
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 //            Amplify.addPlugin(new AWSDataStorePlugin());
             Amplify.addPlugin(new AWSCognitoAuthPlugin());
             Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSS3StoragePlugin());
             Amplify.configure(getApplicationContext());
 
             Log.i(TAG, "Initialized Amplify");
@@ -136,9 +140,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTaskClicked(int position) {
                 Intent taskDetailsIntent = new Intent(getApplicationContext(), TaskDetailsActivity.class);
+
                 taskDetailsIntent.putExtra(TASK_TITLE, taskList.get(position).getTitle());
                 taskDetailsIntent.putExtra(TASK_BODY, taskList.get(position).getDescription());
                 taskDetailsIntent.putExtra(TASK_STATUS, taskList.get(position).getStatus());
+
+                taskDetailsIntent.putExtra(TASK_FILE, taskList.get(position).getFileName());
+
                 startActivity(taskDetailsIntent);
 
             }
@@ -240,12 +248,6 @@ public class MainActivity extends AppCompatActivity {
                 ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null && connectivityManager
                 .getActiveNetworkInfo().isConnected();
-    }
-
-    public static void saveTaskToAPI(Task item) {
-        Amplify.API.mutate(ModelMutation.create(item),
-                success -> Log.i(TAG, "Saved item to api : " + success.getData()),
-                error -> Log.e(TAG, "Could not save item to API/dynamodb", error));
     }
 
     public  void getTaskDataFromAPI()  {
