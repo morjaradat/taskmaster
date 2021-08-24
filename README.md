@@ -97,3 +97,7 @@ Screen Shots
 ![main activity](screenshots/lab-37/Screenshot(227).png)
 
 ![after logout ](screenshots/lab-37/Screenshot(228).png)
+
+# Data-to-taskmaster Lab: 38 - Notification
+
+![Notification](screenshots/lab-38/Screenshot(231).png)
