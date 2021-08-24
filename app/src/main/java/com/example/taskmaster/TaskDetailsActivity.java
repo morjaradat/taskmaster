@@ -37,21 +37,18 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Log.i(TAG, "onCreate: file name " + intent.getExtras().get(MainActivity.TASK_FILE));
+
         String fileName = intent.getExtras().get(MainActivity.TASK_FILE).toString();
 
             getFileFromS3Storage(fileName);
 
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(1500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
-        String linkedText = String.format("<a href=\"%s\">download File</a> ", url);
 
-        TextView test = findViewById(R.id.link);
-        test.setText(Html.fromHtml(linkedText));
-        test.setMovementMethod(LinkMovementMethod.getInstance());
         ImageView imageView = findViewById(R.id.testImg);
 //
 
@@ -59,8 +56,15 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 message -> {
                     Glide.with(getBaseContext())
                             .load(url.toString())
+                            .placeholder(R.drawable.ic_pictures)
+                            .error(R.drawable.ic_pictures)
                             .centerCrop()
                             .into(imageView);
+                    String linkedText = String.format("<a href=\"%s\">download File</a> ", url);
+
+                    TextView test = findViewById(R.id.link);
+                    test.setText(Html.fromHtml(linkedText));
+                    test.setMovementMethod(LinkMovementMethod.getInstance());
                     return false;
                 });
 
