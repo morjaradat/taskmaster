@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -104,6 +105,14 @@ dependencies {
 
     implementation 'com.amazonaws:aws-android-sdk-pinpoint:2.25.+'
     implementation ('com.amazonaws:aws-android-sdk-mobile-client:2.26.+@aar') { transitive = true }
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+
+    // Declare the dependency for the Analytics library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics'
+
 
 
 }

@@ -13,8 +13,11 @@ import android.widget.Toast;
 import com.amplifyframework.auth.AuthUserAttributeKey;
 import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class SignupActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static final String TAG = "signup";
 
@@ -43,6 +46,11 @@ public class SignupActivity extends AppCompatActivity {
             Intent goToLogin = new Intent(SignupActivity.this,LoginActivity.class);
             startActivity(goToLogin);
         });
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
     }
      public void signUp(String username, String email, String password) {
         Amplify.Auth.signUp(

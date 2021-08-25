@@ -31,6 +31,7 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +42,10 @@ import java.util.Objects;
 
 
 public class AddTaskActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+
     static String pattern = "yyMMddHHmmssZ";
     @SuppressLint("SimpleDateFormat")
     static SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -57,6 +62,9 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addtask_activity);
+
+
+
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
 
         Log.i(TAG, "FileUploadName: => "+ FileUploadName);
@@ -123,6 +131,9 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
 
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     public static void saveTaskToAPI(Task item) {

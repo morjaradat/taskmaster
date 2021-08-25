@@ -37,12 +37,15 @@ import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static PinpointManager pinpointManager;
 
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Initialize PinpointManager
         getPinpointManager(getApplicationContext());
 
@@ -227,7 +231,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
+//        throw new RuntimeException("Test Crash");
     }
 
     @SuppressLint("SetTextI18n")
