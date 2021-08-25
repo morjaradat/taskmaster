@@ -11,8 +11,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amplifyframework.core.Amplify;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     private static final String TAG = "login";
 
@@ -40,6 +44,10 @@ public class LoginActivity extends AppCompatActivity {
             Intent goToSignUp = new Intent(LoginActivity.this,SignupActivity.class);
             startActivity(goToSignUp);
         });
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
     }
 

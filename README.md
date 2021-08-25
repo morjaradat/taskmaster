@@ -101,3 +101,10 @@ Screen Shots
 # Data-to-taskmaster Lab: 38 - Notification
 
 ![Notification](screenshots/lab-38/Screenshot(231).png)
+
+
+# Data-to-taskmaster Lab: 39 - Review
+
+![Notification](screenshots/lab-39/Screenshot(232).png)
+
+![Notification](screenshots/lab-39/Screenshot(233).png)

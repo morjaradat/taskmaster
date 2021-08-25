@@ -13,7 +13,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 public class SettingActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static final String TAG = "SettingActivity";
     private String teamName= null;
@@ -38,6 +42,9 @@ public class SettingActivity extends AppCompatActivity {
 //                Intent newIntent = new Intent(getApplicationContext(),MainActivity.class);
 //                startActivity(newIntent);
         });
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     @SuppressLint("NonConstantResourceId")

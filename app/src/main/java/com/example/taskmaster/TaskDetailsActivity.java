@@ -19,12 +19,15 @@ import android.widget.TextView;
 
 import com.amplifyframework.core.Amplify;
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
 
 public class TaskDetailsActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static final String TAG = "TaskDetailsActivity";
     private URL url =null;
@@ -78,6 +81,9 @@ public class TaskDetailsActivity extends AppCompatActivity {
         TextView taskStatus = findViewById(R.id.task_status);
         taskStatus.setText(intent.getExtras().get(MainActivity.TASK_STATUS).toString());
 
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
     private void getFileFromS3Storage(String key) {
         Amplify.Storage.downloadFile(

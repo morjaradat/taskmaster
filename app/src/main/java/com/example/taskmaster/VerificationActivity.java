@@ -10,8 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.amplifyframework.core.Amplify;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class VerificationActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     private static final String TAG = "verification";
 
@@ -34,6 +38,11 @@ public class VerificationActivity extends AppCompatActivity {
                 verification(username,verification_number,password);
             }
         });
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
     }
    public void verification(String username, String confirmationNumber,String password) {
         Amplify.Auth.confirmSignUp(
