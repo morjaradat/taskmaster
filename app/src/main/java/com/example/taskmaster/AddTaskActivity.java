@@ -52,22 +52,39 @@ public class AddTaskActivity extends AppCompatActivity {
     private static final String TAG = "AddTask";
     private String spinner_task_status = null;
     private Team teamData = null;
-    private static String FileUploadName= simpleDateFormat.format(new Date());
+    private static String FileUploadName = simpleDateFormat.format(new Date());
     private static String fileUploadExtention = null;
     private static File uploadFile = null;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addtask_activity);
 
+        if (Amplify.Auth.getCurrentUser()!= null){
+            Log.i(TAG, "Auth: " + Amplify.Auth.getCurrentUser().toString());
+        }else {
+            Log.i(TAG, "Auth:  no user " + Amplify.Auth.getCurrentUser());
+            Intent goToLogin= new Intent(this,LoginActivity.class);
+            startActivity(goToLogin);
+        }
 
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                handleSendImage(intent); // Handle single image being sent
+            }
+        }
 
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
 
-        Log.i(TAG, "FileUploadName: => "+ FileUploadName);
+        Log.i(TAG, "FileUploadName: => " + FileUploadName);
 
         Button uploadFile = findViewById(R.id.upload_file);
         uploadFile.setOnClickListener(new View.OnClickListener() {
@@ -118,10 +135,10 @@ public class AddTaskActivity extends AppCompatActivity {
                     .description(taskBody)
                     .status(taskStatus)
                     .team(teamData)
-                    .fileName(FileUploadName +"."+ fileUploadExtention.split("/")[1])
+                    .fileName(FileUploadName + "." + fileUploadExtention.split("/")[1])
                     .build();
 
-           saveTaskToAPI(item);
+            saveTaskToAPI(item);
 
 //                MainActivity.saveDataToAmplify(taskTitle, taskBody, taskStatus);
             Toast.makeText(getApplicationContext(), "task was added", Toast.LENGTH_LONG).show();
@@ -131,14 +148,37 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
 
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
+  @RequiresApi(api = Build.VERSION_CODES.Q)
+  public void handleSendImage(Intent intent) {
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (imageUri != null) {
+            // Update UI to reflect image being shared
+            fileUploadExtention = getContentResolver().getType(imageUri);
+
+            Log.i(TAG, "onActivityResult: gg is " + fileUploadExtention);
+            Log.i(TAG, "onActivityResult: returned from file explorer");
+            Log.i(TAG, "onActivityResult: success choose image");
+
+
+            uploadFile = new File(getApplicationContext().getFilesDir(), "uploadFile");
+
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                FileUtils.copy(inputStream, new FileOutputStream(uploadFile));
+                Toast.makeText(this, "image was added", Toast.LENGTH_LONG).show();
+            } catch (Exception exception) {
+                Log.e(TAG, "onActivityResult: file upload failed" + exception.toString());
+            }
+        }
+    }
     public static void saveTaskToAPI(Task item) {
         Amplify.Storage.uploadFile(
-                FileUploadName +"."+ fileUploadExtention.split("/")[1],
+                FileUploadName + "." + fileUploadExtention.split("/")[1],
                 uploadFile,
                 success -> {
                     Log.i(TAG, "uploadFileToS3: succeeded " + success.getKey());
@@ -162,7 +202,7 @@ public class AddTaskActivity extends AppCompatActivity {
             Uri uri = data.getData();
             fileUploadExtention = getContentResolver().getType(uri);
 
-            Log.i(TAG, "onActivityResult: gg is " +fileUploadExtention);
+            Log.i(TAG, "onActivityResult: gg is " + fileUploadExtention);
             Log.i(TAG, "onActivityResult: returned from file explorer");
             Log.i(TAG, "onActivityResult: => " + data.getData());
             Log.i(TAG, "onActivityResult:  data => " + data.getType());
@@ -188,15 +228,15 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
     @SuppressLint("NonConstantResourceId")
-    public void onClickRadioButton(View view){
+    public void onClickRadioButton(View view) {
         boolean checked = ((RadioButton) view).isChecked();
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.team1:
                 if (checked)
                     Log.i(TAG, "onClickRadioButton: team 1");
                 getTeamDetailFromAPIByName("team 1");
-                    break;
+                break;
             case R.id.team2:
                 if (checked)
                     Log.i(TAG, "onClickRadioButton: team 2");
@@ -217,8 +257,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 ModelQuery.list(Team.class, Team.NAME.contains(name)),
                 response -> {
                     for (Team teamDetail : response.getData()) {
-                        Log.i(TAG, "the team name is =>"+teamDetail.getName());
-                        teamData=teamDetail;
+                        Log.i(TAG, "the team name is =>" + teamDetail.getName());
+                        teamData = teamDetail;
                     }
                 },
                 error -> Log.e(TAG, "Query failure", error)

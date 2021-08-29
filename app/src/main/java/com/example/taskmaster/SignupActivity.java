@@ -47,9 +47,9 @@ public class SignupActivity extends AppCompatActivity {
             startActivity(goToLogin);
         });
 
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
     }
      public void signUp(String username, String email, String password) {

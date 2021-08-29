@@ -46,7 +46,13 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AddTaskActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

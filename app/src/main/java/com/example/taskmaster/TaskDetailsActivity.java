@@ -81,9 +81,9 @@ public class TaskDetailsActivity extends AppCompatActivity {
         TextView taskStatus = findViewById(R.id.task_status);
         taskStatus.setText(intent.getExtras().get(MainActivity.TASK_STATUS).toString());
 
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
     private void getFileFromS3Storage(String key) {
         Amplify.Storage.downloadFile(
