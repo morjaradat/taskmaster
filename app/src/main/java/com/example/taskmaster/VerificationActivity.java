@@ -39,9 +39,9 @@ public class VerificationActivity extends AppCompatActivity {
             }
         });
 
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
     }
    public void verification(String username, String confirmationNumber,String password) {

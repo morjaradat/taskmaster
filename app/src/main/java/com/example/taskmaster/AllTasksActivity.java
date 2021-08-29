@@ -23,9 +23,9 @@ public class AllTasksActivity extends AppCompatActivity {
         setContentView(R.layout.alltasks_activity);
         Objects.requireNonNull(getSupportActionBar()).setDefaultDisplayHomeAsUpEnabled(true);
 
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
+//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
 }
