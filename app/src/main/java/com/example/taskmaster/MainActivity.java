@@ -45,6 +45,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TASK_LATITUDE = "taskLatitude";
+    public static final String TASK_LONGITUDE = "taskLongitude";
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private static PinpointManager pinpointManager;
@@ -200,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 taskDetailsIntent.putExtra(TASK_TITLE, taskList.get(position).getTitle());
                 taskDetailsIntent.putExtra(TASK_BODY, taskList.get(position).getDescription());
                 taskDetailsIntent.putExtra(TASK_STATUS, taskList.get(position).getStatus());
+                taskDetailsIntent.putExtra(TASK_LATITUDE, taskList.get(position).getLocationLat());
+                taskDetailsIntent.putExtra(TASK_LONGITUDE, taskList.get(position).getLocationLon());
 
                 taskDetailsIntent.putExtra(TASK_FILE, taskList.get(position).getFileName());
 

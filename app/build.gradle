@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -113,6 +114,10 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-crashlytics'
 
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
 
 }

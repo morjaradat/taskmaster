@@ -1,0 +1,181 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateTask {
+  onCreateTask {
+    id
+    title
+    description
+    status
+    taskId
+    fileName
+    team {
+      id
+      name
+      teamTasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    locationLat
+    locationLon
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateTask {
+  onUpdateTask {
+    id
+    title
+    description
+    status
+    taskId
+    fileName
+    team {
+      id
+      name
+      teamTasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    locationLat
+    locationLon
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteTask {
+  onDeleteTask {
+    id
+    title
+    description
+    status
+    taskId
+    fileName
+    team {
+      id
+      name
+      teamTasks {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+    }
+    locationLat
+    locationLon
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnCreateTeam {
+  onCreateTeam {
+    id
+    name
+    teamTasks {
+      items {
+        id
+        title
+        description
+        status
+        taskId
+        fileName
+        locationLat
+        locationLon
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnUpdateTeam {
+  onUpdateTeam {
+    id
+    name
+    teamTasks {
+      items {
+        id
+        title
+        description
+        status
+        taskId
+        fileName
+        locationLat
+        locationLon
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
+subscription OnDeleteTeam {
+  onDeleteTeam {
+    id
+    name
+    teamTasks {
+      items {
+        id
+        title
+        description
+        status
+        taskId
+        fileName
+        locationLat
+        locationLon
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+  }
+}
