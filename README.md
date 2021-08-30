@@ -120,3 +120,13 @@ Screen Shots
 ![upload image form sharing](screenshots/lab-41/Screenshot(239).png)
 
 ![upload image form sharing](screenshots/lab-41/Screenshot(240).png)
+
+# Data-to-taskmaster Lab: 42 - Location
+
+![upload image form sharing](screenshots/lab-42/Screenshot(241).png)
+
+![upload image form sharing](screenshots/lab-42/Screenshot(242).png)
+
+![upload image form sharing](screenshots/lab-42/Screenshot(243).png)
+
+![upload image form sharing](screenshots/lab-42/Screenshot(244).png)

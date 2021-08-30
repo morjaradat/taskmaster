@@ -51,4 +51,5 @@
     <string name="logout">logout</string>
     <string name="upload_file">upload file</string>
     <string name="todo">TODO</string>
+    <string name="Location">Locatoin</string>
 </resources>
