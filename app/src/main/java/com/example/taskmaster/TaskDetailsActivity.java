@@ -60,7 +60,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
 
 
     private static final String TAG = "TaskDetailsActivity";
-    private URL url =null;
+    private URL url = null;
     private Handler handler;
 
     @Override
@@ -78,7 +78,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
 
         String fileName = intent.getExtras().get(MainActivity.TASK_FILE).toString();
 
-            getFileFromS3Storage(fileName);
+        getFileFromS3Storage(fileName);
 
 
         ImageView imageView = findViewById(R.id.testImg);
@@ -131,14 +131,14 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
                 result -> {
                     Log.i(TAG, "Successfully downloaded: " + result.getFile().getAbsoluteFile());
                 },
-                error -> Log.e(TAG,  "Download Failure", error)
+                error -> Log.e(TAG, "Download Failure", error)
         );
 
         Amplify.Storage.getUrl(
                 key,
                 result -> {
                     Log.i(TAG, "Successfully generated: " + result.getUrl());
-                    url= result.getUrl();
+                    url = result.getUrl();
                     handler.sendEmptyMessage(1);
                 },
                 error -> Log.e(TAG, "URL generation failure", error)
@@ -173,10 +173,10 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
                             googleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng
                                             (Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LATITUDE).toString())
-                                            , Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LONGITUDE).toString())))
+                                                    , Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LONGITUDE).toString())))
                                     .title("Marker"));
-                            Log.i(TAG, "onCreate: latitude => "+ latitude);
-                            Log.i(TAG, "onCreate: longitude => "+ longitude);
+                            Log.i(TAG, "onCreate: latitude => " + latitude);
+                            Log.i(TAG, "onCreate: longitude => " + longitude);
                         }
                     }
                 });
@@ -206,6 +206,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
         // use:
         // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
+
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
@@ -228,6 +229,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
+
     private LocationCallback mLocationCallback = new LocationCallback() {
 
         @Override
@@ -237,6 +239,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
 //            longitTextView.setText("Longitude: " + mLastLocation.getLongitude() + "");
         }
     };
+
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
