@@ -130,3 +130,7 @@ Screen Shots
 ![upload image form sharing](screenshots/lab-42/Screenshot(243).png)
 
 ![upload image form sharing](screenshots/lab-42/Screenshot(244).png)
+
+# Data-to-taskmaster Lab: 43 - Analytics with Pinpoint
+
+![upload image form sharing](screenshots/lab-43/Screenshot(246).png)

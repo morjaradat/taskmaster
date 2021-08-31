@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -307,6 +308,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+
+    @SuppressLint("MissingPermission")
     public boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager =
                 ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
