@@ -1,13 +1,9 @@
 package com.example.taskmaster;
 
+import android.content.Intent;
 import android.util.Log;
 
-import com.google.firebase.messaging.FirebaseMessagingService;
-import android.content.Intent;
-import android.os.Bundle;
-
-
-import androidx.core.app.NotificationCompat;
+import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.amazonaws.mobileconnectors.pinpoint.targeting.notification.NotificationClient;
@@ -25,10 +21,9 @@ public class PushListenerService extends FirebaseMessagingService {
     // Intent keys
     public static final String INTENT_SNS_NOTIFICATION_FROM = "from";
     public static final String INTENT_SNS_NOTIFICATION_DATA = "data";
-    private static final String CHANNEL_ID = "CHANNEL_ID";
 
     @Override
-    public void onNewToken(String token) {
+    public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
 
         Log.d(TAG, "Registering push notifications token: " + token);
@@ -36,15 +31,10 @@ public class PushListenerService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "Message: " + remoteMessage.getData());
 
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                .setContentTitle("test notification")
-//                .setContentText(remoteMessage.getData().toString())
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         final NotificationClient notificationClient = MainActivity.getPinpointManager(getApplicationContext()).getNotificationClient();
 
@@ -57,20 +47,12 @@ public class PushListenerService extends FirebaseMessagingService {
         NotificationClient.CampaignPushResult pushResult = notificationClient.handleCampaignPush(notificationDetails);
 
         if (!NotificationClient.CampaignPushResult.NOT_HANDLED.equals(pushResult)) {
-            /**
-             The push message was due to a Pinpoint campaign.
-             If the app was in the background, a local notification was added
-             in the notification center. If the app was in the foreground, an
-             event was recorded indicating the app was in the foreground,
-             for the demo, we will broadcast the notification to let the main
-             activity display it in a dialog.
-             */
+
             if (NotificationClient.CampaignPushResult.APP_IN_FOREGROUND.equals(pushResult)) {
                 /* Create a message that will display the raw data of the campaign push in a dialog. */
                 final HashMap<String, String> dataMap = new HashMap<>(remoteMessage.getData());
                 broadcast(remoteMessage.getFrom(), dataMap);
             }
-            return;
         }
     }
 
@@ -81,14 +63,5 @@ public class PushListenerService extends FirebaseMessagingService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    /**
-     * Helper method to extract push message from bundle.
-     *
-     * @param data bundle
-     * @return message string from push notification
-     */
-    public static String getMessage(Bundle data) {
-        return ((HashMap) data.get("data")).toString();
-    }
 }
 

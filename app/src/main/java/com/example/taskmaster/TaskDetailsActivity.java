@@ -1,18 +1,12 @@
 package com.example.taskmaster;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,12 +14,13 @@ import android.provider.Settings;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.amplifyframework.core.Amplify;
 import com.bumptech.glide.Glide;
@@ -39,16 +34,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.File;
-import java.io.OutputStream;
 import java.net.URL;
 
 public class TaskDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
     private FusedLocationProviderClient mFusedLocationClient;
 
     int PERMISSION_ID = 44;
@@ -109,12 +100,9 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
         TextView taskStatus = findViewById(R.id.task_status);
         taskStatus.setText(intent.getExtras().get(MainActivity.TASK_STATUS).toString());
 
-//        Bundle bundle = new Bundle();
-//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
     }
@@ -128,9 +116,7 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
         Amplify.Storage.downloadFile(
                 key,
                 new File(getApplicationContext().getFilesDir() + key),
-                result -> {
-                    Log.i(TAG, "Successfully downloaded: " + result.getFile().getAbsoluteFile());
-                },
+                result -> Log.i(TAG, "Successfully downloaded: " + result.getFile().getAbsoluteFile()),
                 error -> Log.e(TAG, "Download Failure", error)
         );
 
@@ -157,27 +143,22 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
                 // location from
                 // FusedLocationClient
                 // object
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-//                            latitudeTextView.setText(location.getLatitude() + "");
-//                            longitTextView.setText(location.getLongitude() + "");
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location location = task.getResult();
+                    if (location == null) {
+                        requestNewLocationData();
+                    } else {
 
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
 
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng
-                                            (Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LATITUDE).toString())
-                                                    , Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LONGITUDE).toString())))
-                                    .title("Marker"));
-                            Log.i(TAG, "onCreate: latitude => " + latitude);
-                            Log.i(TAG, "onCreate: longitude => " + longitude);
-                        }
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng
+                                        (Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LATITUDE).toString())
+                                                , Double.parseDouble(getIntent().getExtras().get(MainActivity.TASK_LONGITUDE).toString())))
+                                .title("Marker"));
+                        Log.i(TAG, "onCreate: latitude => " + latitude);
+                        Log.i(TAG, "onCreate: longitude => " + longitude);
                     }
                 });
             } else {
@@ -230,13 +211,11 @@ public class TaskDetailsActivity extends AppCompatActivity implements OnMapReady
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
 
-    private LocationCallback mLocationCallback = new LocationCallback() {
+    private final LocationCallback mLocationCallback = new LocationCallback() {
 
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-//            latitudeTextView.setText("Latitude: " + mLastLocation.getLatitude() + "");
-//            longitTextView.setText("Longitude: " + mLastLocation.getLongitude() + "");
         }
     };
 

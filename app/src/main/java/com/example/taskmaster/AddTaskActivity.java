@@ -2,7 +2,6 @@ package com.example.taskmaster;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,11 +23,6 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -45,11 +39,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.analytics.FirebaseAnalytics;
+
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,14 +52,12 @@ import java.util.Objects;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
    private FusedLocationProviderClient mFusedLocationClient;
     int PERMISSION_ID = 44;
 
     private double latitude;
     private double longitude;
 
-    GoogleMap googleMap;
 
     static String pattern = "yyMMddHHmmssZ";
     @SuppressLint("SimpleDateFormat")
@@ -76,9 +65,11 @@ public class AddTaskActivity extends AppCompatActivity {
     private static final String TAG = "AddTask";
     private String spinner_task_status = null;
     private Team teamData = null;
-    private static String FileUploadName = simpleDateFormat.format(new Date());
+    private static final String FileUploadName = simpleDateFormat.format(new Date());
     private static String fileUploadExtention = null;
     private static File uploadFile = null;
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -119,14 +110,7 @@ public class AddTaskActivity extends AppCompatActivity {
         Log.i(TAG, "FileUploadName: => " + FileUploadName);
 
         Button uploadFile = findViewById(R.id.upload_file);
-        uploadFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFileFromDevice();
-
-
-            }
-        });
+        uploadFile.setOnClickListener(v -> getFileFromDevice());
 
         Spinner spinner = findViewById(R.id.spinner_status);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -182,9 +166,6 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
 
-//        Bundle bundle = new Bundle();
-//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     @SuppressLint("MissingPermission")
@@ -199,25 +180,17 @@ public class AddTaskActivity extends AppCompatActivity {
                 // location from
                 // FusedLocationClient
                 // object
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-//                            latitudeTextView.setText(location.getLatitude() + "");
-//                            longitTextView.setText(location.getLongitude() + "");
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location location = task.getResult();
+                    if (location == null) {
+                        requestNewLocationData();
+                    } else {
 
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
 
-//                            googleMap.addMarker(new MarkerOptions()
-//                                    .position(new LatLng(latitude, longitude))
-//                                    .title("Marker"));
-                            Log.i(TAG, "onCreate: latitude => "+ latitude);
-                            Log.i(TAG, "onCreate: longitude => "+ longitude);
-                        }
+                        Log.i(TAG, "onCreate: latitude => "+ latitude);
+                        Log.i(TAG, "onCreate: longitude => "+ longitude);
                     }
                 });
             } else {
@@ -259,12 +232,8 @@ public class AddTaskActivity extends AppCompatActivity {
         Amplify.Storage.uploadFile(
                 FileUploadName + "." + fileUploadExtention.split("/")[1],
                 uploadFile,
-                success -> {
-                    Log.i(TAG, "uploadFileToS3: succeeded " + success.getKey());
-                },
-                error -> {
-                    Log.e(TAG, "uploadFileToS3: failed " + error.toString());
-                }
+                success -> Log.i(TAG, "uploadFileToS3: succeeded " + success.getKey()),
+                error -> Log.e(TAG, "uploadFileToS3: failed " + error.toString())
         );
         Amplify.API.mutate(ModelMutation.create(item),
                 success -> Log.i(TAG, "Saved item to api : " + success.getData()),
@@ -278,6 +247,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
         if (requestCode == 999 && resultCode == RESULT_OK) {
 //            FileUploadNmae = data.getData()
+            assert data != null;
             Uri uri = data.getData();
             fileUploadExtention = getContentResolver().getType(uri);
 
@@ -380,13 +350,10 @@ public class AddTaskActivity extends AppCompatActivity {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
     }
-    private LocationCallback mLocationCallback = new LocationCallback() {
+    private final LocationCallback mLocationCallback = new LocationCallback() {
 
         @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location mLastLocation = locationResult.getLastLocation();
-//            latitudeTextView.setText("Latitude: " + mLastLocation.getLatitude() + "");
-//            longitTextView.setText("Longitude: " + mLastLocation.getLongitude() + "");
+        public void onLocationResult(@NonNull LocationResult locationResult) {
         }
     };
     private void requestPermissions() {

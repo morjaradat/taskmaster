@@ -1,7 +1,5 @@
 package com.example.taskmaster;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,11 +11,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static final String TAG = "SettingActivity";
     private String teamName= null;
@@ -39,12 +36,8 @@ public class SettingActivity extends AppCompatActivity {
 
             Toast.makeText(SettingActivity.this, "UserName and Team Updated", Toast.LENGTH_SHORT).show();
 
-//                Intent newIntent = new Intent(getApplicationContext(),MainActivity.class);
-//                startActivity(newIntent);
         });
-//        Bundle bundle = new Bundle();
-//        bundle.putString(FirebaseAnalytics.Param.SUCCESS,TAG);
-//        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
     }
 
     @SuppressLint("NonConstantResourceId")
