@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,13 +29,11 @@ import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
-import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -47,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TASK_LATITUDE = "taskLatitude";
     public static final String TASK_LONGITUDE = "taskLongitude";
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static PinpointManager pinpointManager;
 
@@ -61,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private Team teamData = null;
     private String selectedTeam=null;
-    private String Username = null;
 
     public static PinpointManager getPinpointManager(final Context applicationContext) {
         if (pinpointManager == null) {
@@ -86,17 +81,14 @@ public class MainActivity extends AppCompatActivity {
             pinpointManager = new PinpointManager(pinpointConfig);
 
             FirebaseMessaging.getInstance().getToken()
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull com.google.android.gms.tasks.Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
-                            final String token = task.getResult();
-                            Log.d(TAG, "Registering push notifications token: " + token);
-                            pinpointManager.getNotificationClient().registerDeviceToken(token);
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
                         }
+                        final String token = task.getResult();
+                        Log.d(TAG, "Registering push notifications token: " + token);
+                        pinpointManager.getNotificationClient().registerDeviceToken(token);
                     });
         }
         return pinpointManager;
@@ -108,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Initialize PinpointManager
         getPinpointManager(getApplicationContext());
 
@@ -153,25 +145,7 @@ public class MainActivity extends AppCompatActivity {
        logout.setOnClickListener(v -> logout());
 
 
-
-//        Button taskDetail1 = findViewById(R.id.taskDetails1);
-//        taskDetail1.setOnClickListener(getViewTaskDetail1);
-//
-//        Button taskDetail2 = findViewById(R.id.taskDetails2);
-//        taskDetail2.setOnClickListener(getViewTaskDetail2);
-//
-//        Button taskDetail3 = findViewById(R.id.taskDetails3);
-//        taskDetail3.setOnClickListener(getViewTaskDetail3);
-
-
-
         RecyclerView recyclerView = findViewById(R.id.recycler_task);
-
-//              Team team = Team.builder().name("team 3").build();
-//
-//        Amplify.API.mutate(ModelMutation.create(team),
-//                success -> Log.i(TAG, "Saved Team to api : " + success.getData()),
-//                error -> Log.e(TAG, "Could not save Team to API/dynamodb", error));
 
         handler = new Handler(Looper.getMainLooper(),
                 message -> {
@@ -190,11 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         // link list to the adapter
         adapter = new Adapter(taskList, new Adapter.onTaskClickedListener() {
-//            @Override
-//            public void addTaskToTheList() {
-////                taskList.add(new Task("task 4","this task 4 for testing ","new"));
-//                listItemChanged();
-//            }
+
 
             @Override
             public void onTaskClicked(int position) {
@@ -221,9 +191,7 @@ public class MainActivity extends AppCompatActivity {
                        error -> Log.e(TAG, "Delete failed", error)
                );
 
-//                Amplify.DataStore.delete(taskList.get(position),
-//                        success -> Log.i(TAG, "item deleted from datastore: " + success.item().toString()),
-//                        failure -> Log.e(TAG, "Could not query DataStore", failure));
+
 
                 taskList.remove(position);
                 listItemChanged();
@@ -280,15 +248,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onResume: called");
     }
 
-//    public static void saveDataToAmplify(String title, String body, String status) {
-//        Task item = Task.builder().title(title).description(body).status(status).build();
-//
-//        Amplify.DataStore.save(item,
-//                success -> Log.i(TAG, "Saved item to data store : " + success.item().toString()),
-//                error -> Log.e(TAG, "Could not save item to DataStore", error)
-//        );
-//        listItemChanged();
-//    }
+
 
     public synchronized static void getDataFromAmplify() {
         Amplify.DataStore.query(Task.class, todos -> {
@@ -304,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private static void listItemChanged() {
         adapter.notifyDataSetChanged();
     }
@@ -379,45 +340,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(allTaskIntent);
     };
 
-    //    private final View.OnClickListener getViewTaskDetail1 = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Button task1 = findViewById(R.id.taskDetails1);
-//            String taskName = task1.getText().toString();
-//            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
-//            taskDetailIntent.putExtra("taskName", taskName);
-//            startActivity(taskDetailIntent);
-//        }
-//    };
-//
-//    private final View.OnClickListener getViewTaskDetail2 = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Button task1 = findViewById(R.id.taskDetails2);
-//            String taskName = task1.getText().toString();
-//            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
-//            taskDetailIntent.putExtra("taskName", taskName);
-//            startActivity(taskDetailIntent);
-//        }
-//    };
-//
-//    private final View.OnClickListener getViewTaskDetail3 = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Button task1 = findViewById(R.id.taskDetails3);
-//            String taskName = task1.getText().toString();
-//            Intent taskDetailIntent = new Intent(getBaseContext(), TaskDetailsActivity.class);
-//            taskDetailIntent.putExtra("taskName", taskName);
-//            startActivity(taskDetailIntent);
-//        }
-//    };
-    public  void getCurrentUser() {
-        AuthUser authUser = Amplify.Auth.getCurrentUser();
-        Username = authUser.getUsername();
-        Log.i(TAG, "getCurrentUser: " + authUser.toString());
-        Log.i(TAG, "getCurrentUser: username" + authUser.getUsername());
-        Log.i(TAG, "getCurrentUser: userId" + authUser.getUserId());
-    }
 
     public void logout(){
         Amplify.Auth.signOut(

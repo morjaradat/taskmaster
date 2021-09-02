@@ -59,16 +59,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView taskTitle;
-        //        private TextView taskBody;
-//        private TextView taskStatus;
 
         public ViewHolder(@NonNull View itemView, onTaskClickedListener listener) {
             super(itemView);
             taskTitle = itemView.findViewById(R.id.task_title);
             TextView delete = itemView.findViewById(R.id.delete);
 
-//             taskBody = itemView.findViewById(R.id.task_body);
-//            taskStatus = itemView.findViewById(R.id.task_status);
 
             itemView.setOnClickListener(v -> listener.onTaskClicked(getBindingAdapterPosition()));
 

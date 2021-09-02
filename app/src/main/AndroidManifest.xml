@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Taskmaster"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:fullBackupContent="true">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
@@ -42,7 +43,8 @@
         <activity
             android:name=".TaskDetailsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,7 +56,8 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AddTaskActivity"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
